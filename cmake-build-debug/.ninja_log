@@ -1,0 +1,5 @@
+# ninja log v5
+5	1246	1676071254073061072	CMakeFiles/newEnronMail.dir/Sender.cpp.o	d46544533f50de37
+1249	1324	1676124928414106672	newEnronMail	f677ac741388f61b
+4	1598	1676085137346385380	CMakeFiles/newEnronMail.dir/Worker.cpp.o	6a7fcf505ab184e5
+3	1249	1676124928337139239	CMakeFiles/newEnronMail.dir/main.cpp.o	1862dace44f7dec4
