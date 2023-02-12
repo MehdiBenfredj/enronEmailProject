@@ -18,11 +18,13 @@ public:
 
     Sender * addSender(std::string const& sender, std::unordered_map<std::string, Sender*> & senders);
 
-    std::pair<std::string,std::set<std::string>>parseEmail(std::string const& filePath);
+    std::pair<std::string,std::set<std::string> > parseEmail(std::string const& filePath);
 
     void addReceiver(Sender * &sender, std::string const& receiver);
 
     void job(std::string &path, std::unordered_map<std::string, Sender*> & senders);
+
+    void rm_nonprinting (std::string& str);
 };
 
 

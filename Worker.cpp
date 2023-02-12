@@ -34,7 +34,7 @@ Sender * Worker::addSender(string const& sender, unordered_map<string, Sender*> 
     }
 }
 
-void rm_nonprinting (std::string& str)
+void Worker::rm_nonprinting (std::string& str)
 {
     str.erase (std::remove_if (str.begin(), str.end(),
                                [](unsigned char c){
@@ -43,7 +43,7 @@ void rm_nonprinting (std::string& str)
                str.end());
 }
 
-pair<string, set<string>> Worker::parseEmail(string const& filePath) {
+pair<string, set<string> > Worker::parseEmail(string const& filePath) {
     string sender;
     set<string> emails;
     ifstream file(filePath);
@@ -60,7 +60,7 @@ pair<string, set<string>> Worker::parseEmail(string const& filePath) {
             }
             else if (line.find("From:") == 0) {
                 string from(line.substr(6));
-                rm_nonprinting(from) ;
+                //rm_nonprinting(from) ;
                 sender = from;
             }
             else if (line.find("To:") == 0) {
@@ -82,8 +82,9 @@ pair<string, set<string>> Worker::parseEmail(string const& filePath) {
                         {
                             string token_string(token);
                             token_string.erase(std::remove(token_string.begin(), token_string.end(), '\t'), token_string.end());
-                            token = strtok(NULL, ", ");
                             emails.insert(token_string);
+                            token = strtok(NULL, ", ");
+                            
                         }
                         champs.clear();
                         break;
@@ -188,7 +189,7 @@ pair<string, set<string>> Worker::parseEmail(string const& filePath) {
 
 void Worker::job(std::string &path, std::unordered_map<std::string, Sender*> & senders) {
     // Parsing the file
-    pair<string, set<string>> result = parseEmail(path);
+    pair<string, set<string> > result = parseEmail(path);
 
     // Add the sender
     Sender * sender = addSender(result.first, senders);

@@ -70,15 +70,14 @@ int main() {
     stack<string> files;
 
     // Get file paths
-    string directory("../../../../mehdi/Downloads/maildir");
-    string dir("../email");
-    getFiles(directory,files);
+    string dir("../email/maildir");
+    getFiles(dir,files);
 
     // Create senders map
     unordered_map<string, Sender*> senders;
 
 
-    // Creation des threads 5
+    // Creation des threads
     std::thread threads[12];
     for (auto & i : threads) {
         i = thread([&files, &senders]() { doWork(files, senders); });
@@ -89,25 +88,32 @@ int main() {
         thread.join();
     }
 
-    // Create writing file
-    std::ofstream outfile;
-    outfile.open("../result.txt");
+  
 
-    // Si erreur d'ouverture
-    if(outfile.bad()) {
-        cout << "cannot open result file"; // on quitte
-    } else {
-        for (pair<string, Sender *> sender : senders) {
-            cout << sender.first << endl;
-            outfile << sender.first << endl;
-            for (pair<string,int> receiver : sender.second->getReceivers()) {
-                cout << receiver.second << ":" << receiver.first << endl;
-                outfile << receiver.second << ":" << receiver.first << endl;
-            }
 
-            outfile << endl;
+std::ofstream outfile;
+outfile.open("result.txt");
+
+
+//Creating a worker
+Worker worker;
+
+if(!outfile.is_open()) {
+    cout << "Cannot open result file"; // exit
+} else {
+    for (pair<string, Sender *> sender : senders) {
+        worker.rm_nonprinting(sender.first);
+        outfile << sender.first;
+        for (pair<string,int> receiver : sender.second->getReceivers()) {
+            worker.rm_nonprinting(receiver.first);
+            outfile << " " << receiver.second  << ":" << receiver.first;
         }
+        outfile << endl; // end line with newline character
     }
+    outfile.close(); // close the file
+}
+
+
 
 
 
@@ -121,7 +127,7 @@ int main() {
     // Output the elapsed time
     std::cout << "Elapsed time: " << elapsed_time.count() << " milliseconds" << std::endl;
 
-
+    cout << senders.size() << endl;
 
     return 0;
 }
