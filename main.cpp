@@ -127,7 +127,5 @@ if(!outfile.is_open()) {
     // Output the elapsed time
     std::cout << "Elapsed time: " << elapsed_time.count() << " milliseconds" << std::endl;
 
-    cout << senders.size() << endl;
-
     return 0;
 }
