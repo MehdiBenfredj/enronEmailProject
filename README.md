@@ -1,7 +1,5 @@
 # enronEmailProject
 
-# Sans titre
-
 # How to run:
 
 - Open Terminal
