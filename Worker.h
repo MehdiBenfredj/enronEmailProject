@@ -11,10 +11,6 @@
 #include "Sender.h"
 
 class Worker {
-private:
-    std::string m_path;
-
-
 public:
     Worker();
 

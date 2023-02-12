@@ -3,12 +3,14 @@
 //
 
 #include "Worker.h"
-#include <string>
 #include "iostream"
 #include <fstream>
 #include <set>
+#include <mutex>
 
 using namespace std;
+std::mutex workerMutex;
+
 Worker::Worker()
 {}
 
@@ -16,18 +18,20 @@ Worker::~Worker() = default;
 
 
 void Worker::addReceiver(Sender * &sender, string const& receiver) {
+    const std::lock_guard<std::mutex> lock(workerMutex);
     sender->addReceiver(receiver);
 }
 
 Sender * Worker::addSender(string const& sender, unordered_map<string, Sender*> & senders) {
+
     try {
         return senders.at(sender);
     } catch (out_of_range& e) {
         auto * senderPointer = new Sender(sender);
+        const std::lock_guard<std::mutex> lock(workerMutex);
         senders[sender] = senderPointer;
         return senderPointer;
     }
-
 }
 
 void rm_nonprinting (std::string& str)
@@ -46,7 +50,10 @@ pair<string, set<string>> Worker::parseEmail(string const& filePath) {
     string line;
     string champs;
 
+
+
     if (file.is_open()) {
+
         while (getline(file, line)) {
             if (line.rfind("X", 0) == 0) {
                 break;
@@ -180,11 +187,8 @@ pair<string, set<string>> Worker::parseEmail(string const& filePath) {
 }
 
 void Worker::job(std::string &path, std::unordered_map<std::string, Sender*> & senders) {
-    // Printing the path
-    //cout << path << endl;
-
     // Parsing the file
-    pair<string, set<string>> result =parseEmail(path);
+    pair<string, set<string>> result = parseEmail(path);
 
     // Add the sender
     Sender * sender = addSender(result.first, senders);

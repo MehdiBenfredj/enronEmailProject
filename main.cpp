@@ -5,9 +5,10 @@
 #include "Worker.h"
 #include <dirent.h>
 #include <stack>
-#include <set>
 #include <thread>
 #include <mutex>
+#include <fstream>
+
 
 using namespace std;
 
@@ -36,8 +37,29 @@ void getFiles(string const& directory, stack<string> & files) {
 
 
 
-std::mutex myMutex;
+mutex myMutex;
+string popFromStack(stack<string> & files, unordered_map<string, Sender*> & senders) {
+    const std::lock_guard<std::mutex> lock(myMutex);
+    string filename;
+    if(!files.empty()){
+        filename = files.top();
+        files.pop();
+    }
+    return filename;
+}
 
+void doWork(stack<string> & files, unordered_map<string, Sender*> & senders) {
+    while(true) {
+        string filename = popFromStack(files, senders);
+        if (!filename.empty()) {
+            Worker worker;
+            worker.job(filename, senders);
+        } else {
+            break;
+        }
+
+    }
+}
 
 
 int main() {
@@ -50,31 +72,47 @@ int main() {
     // Get file paths
     string directory("../../../../mehdi/Downloads/maildir");
     string dir("../email");
-    getFiles(dir,files);
+    getFiles(directory,files);
 
     // Create senders map
     unordered_map<string, Sender*> senders;
 
-    // Create Worker
-    Worker worker;
 
-    ////////Worker Job/////////////
-    while (!files.empty()) {
-        worker.job(files.top(), senders);
-        files.pop();
+    // Creation des threads 5
+    std::thread threads[12];
+    for (auto & i : threads) {
+        i = thread([&files, &senders]() { doWork(files, senders); });
     }
 
-    // printing Sender + receivers + count
-    for(pair<string, Sender*> senderr : senders) {
-        cout << senderr.second->getEmail() << endl;
-        for(pair<string, int> rec : senderr.second->getReceivers()) {
-            cout << rec.first << endl;
-            cout << rec.second << endl;
+    // Wait for all threads to finish
+    for (auto & thread : threads) {
+        thread.join();
+    }
+
+    // Create writing file
+    std::ofstream outfile;
+    outfile.open("../result.txt");
+
+    // Si erreur d'ouverture
+    if(outfile.bad()) {
+        cout << "cannot open result file"; // on quitte
+    } else {
+        for (pair<string, Sender *> sender : senders) {
+            cout << sender.first << endl;
+            outfile << sender.first << endl;
+            for (pair<string,int> receiver : sender.second->getReceivers()) {
+                cout << receiver.second << ":" << receiver.first << endl;
+                outfile << receiver.second << ":" << receiver.first << endl;
+            }
+
+            outfile << endl;
         }
-        delete(senderr.second);
     }
 
-    cout << senders.size() << endl;
+
+
+    // Fermeture du fichier
+    outfile.close();
 
     // Stop timer
     auto stop = std::chrono::high_resolution_clock::now();
