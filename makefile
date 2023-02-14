@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Ofast -Wall -Werror -g
+CXXFLAGS = -std=c++17 -Ofast -Wall -g
 
 SRCS = main.cpp Sender.cpp Worker.cpp unableToOpenFileException.cpp
 OBJS = $(SRCS:.cpp=.o)

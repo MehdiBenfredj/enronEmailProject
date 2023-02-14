@@ -53,7 +53,7 @@ pair<string, set<string> > Worker::parseEmail(string const& filePath) {
     try {
         if (file.is_open()) {
             while (getline(file, line)) {
-                if (line.rfind("X", 0) == 0) {
+                if (line.rfind("X", 0)) {
                     break;
                 }
                 else if (line.find("From:") == 0) {
@@ -187,7 +187,6 @@ pair<string, set<string> > Worker::parseEmail(string const& filePath) {
     } catch (unableToOpenFileException &erreur) {
         cout << "Erreur unableToOpenFileException ! (cause " << erreur.cause << ")" << endl;
     }
-
 }
 
 void Worker::job(std::string &path, std::unordered_map<std::string, Sender*> & senders) {
