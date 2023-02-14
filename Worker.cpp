@@ -185,9 +185,9 @@ pair<string, set<string> > Worker::parseEmail(string const& filePath) {
             throw(erreur);
         }
     } catch (unableToOpenFileException &erreur) {
-        cout << "Erreur unableToOpenFileException ! (cause " << erreur.cause << ")" << endl;
+        cout << erreur.what() << endl;
+        cout << erreur.cause << endl;
     }
-
 }
 
 void Worker::job(std::string &path, std::unordered_map<std::string, Sender*> & senders) {

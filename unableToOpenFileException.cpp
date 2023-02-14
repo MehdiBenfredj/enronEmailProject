@@ -10,3 +10,7 @@ unableToOpenFileException::unableToOpenFileException(std::string filePath) : cau
 // Le constructeur de copie. Il est utilisé par le mécanisme
 // des exceptions :
 unableToOpenFileException::unableToOpenFileException(const unableToOpenFileException &source) : cause(source.cause) {}
+
+char * unableToOpenFileException::what () {
+    return "unable to read file: ";
+}

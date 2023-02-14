@@ -5,8 +5,9 @@
 #ifndef NEWENRONMAIL_UNABLETOOPENFILEEXCEPTION_H
 #define NEWENRONMAIL_UNABLETOOPENFILEEXCEPTION_H
 #include "string"
+#include "exception"
 
-class unableToOpenFileException {
+class unableToOpenFileException : std::exception {
 public:
     std::string cause;  // Entier spécifiant la cause de l'exception.
     // Le constructeur. Il appelle le constructeur de cause.
@@ -15,6 +16,8 @@ public:
     // Le constructeur de copie. Il est utilisé par le mécanisme
     // des exceptions :
     unableToOpenFileException(const unableToOpenFileException &source);
+
+    virtual char * what ();
 };
 
 
