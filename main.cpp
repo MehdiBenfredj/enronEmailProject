@@ -69,12 +69,11 @@ int main() {
     stack<string> files;
 
     // Get file paths
-    string dir("../../../../mehdi/email/maildir");
+    string dir("../../../mehdi/email/maildir");
     getFiles(dir,files);
 
     // Create senders map
     unordered_map<string, Sender*> senders;
-
 
     // Creation des threads
     std::thread threads[12];
