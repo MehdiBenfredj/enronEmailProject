@@ -49,15 +49,14 @@ string popFromStack(stack<string> & files, unordered_map<string, Sender*> & send
 }
 
 void doWork(stack<string> & files, unordered_map<string, Sender*> & senders) {
+    Worker worker;
     while(true) {
         string filename = popFromStack(files, senders);
         if (!filename.empty()) {
-            Worker worker;
             worker.job(filename, senders);
         } else {
             break;
         }
-
     }
 }
 
@@ -70,7 +69,7 @@ int main() {
     stack<string> files;
 
     // Get file paths
-    string dir("../email/maildir");
+    string dir("../../../../mehdi/email/maildir");
     getFiles(dir,files);
 
     // Create senders map
@@ -112,13 +111,9 @@ if(!outfile.is_open()) {
     }
     outfile.close(); // close the file
 }
-
-
-
-
-
     // Fermeture du fichier
     outfile.close();
+
 
     // Stop timer
     auto stop = std::chrono::high_resolution_clock::now();
