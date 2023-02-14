@@ -1,14 +1,21 @@
-main: main.o Worker.o Sender.o
-	g++ -std=c++17 -Ofast main.o Worker.o Sender.o -o main
+CXX = g++
+CXXFLAGS = -std=c++17 -Ofast -Wall -Werror -g
 
-main.o: main.cpp
-	g++ -std=c++17 -Ofast -c main.cpp
+SRCS = main.cpp Sender.cpp Worker.cpp unableToOpenFileException.cpp
+OBJS = $(SRCS:.cpp=.o)
+DEPS = $(SRCS:.cpp=.d)
 
-Worker.o: Worker.cpp	
-	g++ -std=c++17 -Ofast -c Worker.cpp 
+TARGET = myprogram
 
-Sender.o: Sender.cpp
-	g++ -std=c++17 -Ofast -c Sender.cpp
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
 clean:
-	rm *.o
+	rm -f $(OBJS) $(DEPS) $(TARGET)
+
+-include $(DEPS)
