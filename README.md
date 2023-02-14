@@ -13,6 +13,6 @@ mehdi@MacBook-Pro-de-Mehdi enronMailProject % ./main
 ```
 
 <aside>
-💡 Dont worry, sometimes you may have segmentation fault! Shit happen in life
+💡 No more segmentation error, in expense of some execution speed 
 
 </aside>
