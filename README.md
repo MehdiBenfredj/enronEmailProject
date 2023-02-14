@@ -9,7 +9,7 @@
 
 ```bash
 mehdi@MacBook-Pro-de-Mehdi enronMailProject % make
-mehdi@MacBook-Pro-de-Mehdi enronMailProject % ./main
+mehdi@MacBook-Pro-de-Mehdi enronMailProject % ./myprogram
 ```
 
 <aside>
