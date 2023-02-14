@@ -23,12 +23,11 @@ void Worker::addReceiver(Sender * &sender, string const& receiver) {
 }
 
 Sender * Worker::addSender(string const& sender, unordered_map<string, Sender*> & senders) {
-
+    const std::lock_guard<std::mutex> lock(workerMutex);
     try {
         return senders.at(sender);
     } catch (out_of_range& e) {
         auto * senderPointer = new Sender(sender);
-        const std::lock_guard<std::mutex> lock(workerMutex);
         senders[sender] = senderPointer;
         return senderPointer;
     }
