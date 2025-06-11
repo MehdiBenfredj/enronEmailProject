@@ -8,8 +8,8 @@
 - Enter these commands:
 
 ```bash
-mehdi@MacBook-Pro-de-Mehdi enronMailProject % make
-mehdi@MacBook-Pro-de-Mehdi enronMailProject % ./myprogram
+% make
+% ./myprogram
 ```
 
 <aside>
