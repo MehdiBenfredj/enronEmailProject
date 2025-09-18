@@ -69,8 +69,9 @@ int main() {
     stack<string> files;
 
     // Get file paths
-    string dir("../../../../mehdi/email/maildir");
+    string dir("/Users/mehdi/code/go/enron_email/maildir");
     getFiles(dir,files);
+    cout << "Number of files: " << files.size() << endl;
 
     // Create senders map
     unordered_map<string, Sender*> senders;
@@ -89,37 +90,37 @@ int main() {
   
 
 
-std::ofstream outfile;
-outfile.open("result.txt");
+    std::ofstream outfile;
+    outfile.open("result.txt");
 
 
-//Creating a worker
-Worker worker;
+    //Creating a worker
+    Worker worker;
 
-if(!outfile.is_open()) {
-    cout << "Cannot open result file"; // exit
-} else {
-    for (pair<string, Sender *> sender : senders) {
-        worker.rm_nonprinting(sender.first);
-        outfile << sender.first;
-        for (pair<string,int> receiver : sender.second->getReceivers()) {
-            worker.rm_nonprinting(receiver.first);
-            outfile << " " << receiver.second  << ":" << receiver.first;
+    if(!outfile.is_open()) {
+        cout << "Cannot open result file"; // exit
+    } else {
+        for (pair<string, Sender *> sender : senders) {
+            worker.rm_nonprinting(sender.first);
+            outfile << sender.first;
+            for (pair<string,int> receiver : sender.second->getReceivers()) {
+                worker.rm_nonprinting(receiver.first);
+                outfile << " " << receiver.second  << ":" << receiver.first;
+            }
+            outfile << endl; // end line with newline character
         }
-        outfile << endl; // end line with newline character
+        outfile.close(); // close the file
     }
-    outfile.close(); // close the file
-}
-    // Fermeture du fichier
-    outfile.close();
+        // Fermeture du fichier
+        outfile.close();
 
 
-    // Stop timer
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        // Stop timer
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
 
-    // Output the elapsed time
-    std::cout << "Elapsed time: " << elapsed_time.count() << " milliseconds" << std::endl;
+        // Output the elapsed time
+        std::cout << "Elapsed time: " << elapsed_time.count() << " milliseconds" << std::endl;
 
-    return 0;
+        return 0;
 }
